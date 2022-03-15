@@ -8,7 +8,7 @@ public class FMS_LadyBug : FiniteStateMachine
     public LadyStates currState;
 
     private WanderAround wanderAround;
-    private Arrive arrive;
+    private FMS_PathExecution fMS_PathExecution;
     private Lady_BLACKBOARD blackBoard;
 
     //private float elapsedTime;
@@ -20,15 +20,15 @@ public class FMS_LadyBug : FiniteStateMachine
     {
         blackBoard = GetComponent<Lady_BLACKBOARD>();
         wanderAround = GetComponent<WanderAround>();
-        arrive = GetComponent<Arrive>();
+        fMS_PathExecution = GetComponent<FMS_PathExecution>();
 
         wanderAround.enabled = false;
-        arrive.enabled = false;
+        fMS_PathExecution.enabled = false;
     }
     public override void Exit()
     {
         wanderAround.enabled = false;
-        arrive.enabled = false;
+        fMS_PathExecution.enabled = false;
 
         target.transform.parent = null;
 
@@ -91,7 +91,7 @@ public class FMS_LadyBug : FiniteStateMachine
                     if (possibleTargetDistance < currTargetDistance)
                     {
                         target = nearestEgg;
-                        arrive.target = target;
+                        fMS_PathExecution.Target = target;
                     }
                 }
 
@@ -141,16 +141,16 @@ public class FMS_LadyBug : FiniteStateMachine
                 wanderAround.enabled = false;
                 break;
             case LadyStates.REACHING_EGG:
-                arrive.enabled = false;
+                fMS_PathExecution.enabled = false;
                 break;
             case LadyStates.REACHING_SEED:
-                arrive.enabled = false;
+                fMS_PathExecution.enabled = false;
                 break;
             case LadyStates.TRANSPORTING:
                 place = null;
-                arrive.enabled = false;
+                fMS_PathExecution.enabled = false;
                 target.transform.parent = null;
-                arrive.target = null;
+                fMS_PathExecution.Target = null;
                 break;
 
             default:
@@ -166,16 +166,16 @@ public class FMS_LadyBug : FiniteStateMachine
                 wanderAround.enabled = true;
                 break;
             case LadyStates.REACHING_EGG:
-                arrive.enabled = true;
-                arrive.target = target;
+                fMS_PathExecution.enabled = true;
+                fMS_PathExecution.Target = target;
 
                 break;
             case LadyStates.REACHING_SEED:
-                arrive.enabled = true;
-                arrive.target = target;
+                fMS_PathExecution.enabled = true;
+                fMS_PathExecution.Target = target;
                 break;
             case LadyStates.TRANSPORTING:
-                arrive.target = place;
+                fMS_PathExecution.Target = place;
                 if (target.CompareTag(blackBoard.seedTag))
                     target.tag = blackBoard.seedTransportedTag;
                 else

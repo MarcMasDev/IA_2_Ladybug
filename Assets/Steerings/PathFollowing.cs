@@ -50,11 +50,16 @@ namespace Steerings
 
 			SURROGATE_TARGET.transform.position = path.vectorPath [currentWaypointIndex];
 
-            if (currentWaypointIndex == path.vectorPath.Count - 1)
-                // use arrive for the last waypoint
-                return Arrive.GetSteering(ownKS, SURROGATE_TARGET, wayPointReachedRadius/2, wayPointReachedRadius*2);
-            else 
-			    return Seek.GetSteering(ownKS, SURROGATE_TARGET);
+			if (currentWaypointIndex == path.vectorPath.Count - 1)
+			{
+				// use arrive for the last waypoint
+				return Arrive.GetSteering(ownKS, SURROGATE_TARGET, wayPointReachedRadius / 2, wayPointReachedRadius * 2);
+			}
+
+			else
+			{
+				return Seek.GetSteering(ownKS, SURROGATE_TARGET);
+			}
 			
 		}
 	}
