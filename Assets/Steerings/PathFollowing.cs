@@ -55,12 +55,10 @@ namespace Steerings
 				// use arrive for the last waypoint
 				return Arrive.GetSteering(ownKS, SURROGATE_TARGET, wayPointReachedRadius / 2, wayPointReachedRadius * 2);
 			}
-
 			else
 			{
 				return Seek.GetSteering(ownKS, SURROGATE_TARGET);
 			}
-			
 		}
 	}
 }

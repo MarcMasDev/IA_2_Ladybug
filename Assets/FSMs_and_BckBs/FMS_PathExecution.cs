@@ -35,6 +35,7 @@ public class FMS_PathExecution : FiniteStateMachine
     public override void ReEnter()
     {
         base.ReEnter();
+        currentState = PathExecutionStates.INITIAL;
         Terminated = false;
     }
     void Update()
@@ -78,7 +79,7 @@ public class FMS_PathExecution : FiniteStateMachine
                 pathFollowing.enabled = true;
                 break;
             case (PathExecutionStates.TERMINATED):
-                Terminated = true;
+                Terminated = true;      
                 break;
         }
         currentState = newState;

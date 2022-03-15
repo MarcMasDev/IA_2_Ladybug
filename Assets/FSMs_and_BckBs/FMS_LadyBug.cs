@@ -1,6 +1,7 @@
 using FSM;
 using Steerings;
 using UnityEngine;
+using Pathfinding;
 
 public class FMS_LadyBug : FiniteStateMachine
 {
@@ -12,24 +13,22 @@ public class FMS_LadyBug : FiniteStateMachine
     private Lady_BLACKBOARD blackBoard;
 
     //private float elapsedTime;
-
     private GameObject target;
     private GameObject place;
+
+    public Path CurrentPath;
+    private int randomWaypoint;
 
     private void Start()
     {
         blackBoard = GetComponent<Lady_BLACKBOARD>();
-        wanderAround = GetComponent<WanderAround>();
         fMS_PathExecution = GetComponent<FMS_PathExecution>();
-
-        wanderAround.enabled = false;
         fMS_PathExecution.enabled = false;
     }
     public override void Exit()
     {
-        wanderAround.enabled = false;
+        //wanderAround.enabled = false;
         fMS_PathExecution.enabled = false;
-
         target.transform.parent = null;
 
         this.enabled = false;
@@ -43,6 +42,13 @@ public class FMS_LadyBug : FiniteStateMachine
                 break;
             case LadyStates.WANDERING:
 
+                if (fMS_PathExecution.Terminated)
+                {
+                    fMS_PathExecution.ReEnter();
+                    place = SensingUtils.FindRandomInstanceWithinRadius(gameObject, "NODE", 90);
+                    fMS_PathExecution.Target = place;
+                }
+                
                 //looking for an egg and seed
                 GameObject egg = SensingUtils.FindInstanceWithinRadius(gameObject, blackBoard.eggTag, blackBoard.eggMinDistance);
                 GameObject seed = SensingUtils.FindInstanceWithinRadius(gameObject, blackBoard.seedTag, blackBoard.seedMinDistance);
@@ -78,8 +84,6 @@ public class FMS_LadyBug : FiniteStateMachine
                     egg = null;
                     ChangeState(LadyStates.REACHING_EGG);
                 }
-                
-
                 break;
             case LadyStates.REACHING_EGG:
 
@@ -131,6 +135,7 @@ public class FMS_LadyBug : FiniteStateMachine
         }
     }
 
+
     private void ChangeState(LadyStates newState)
     {
         switch (currState)
@@ -138,17 +143,17 @@ public class FMS_LadyBug : FiniteStateMachine
             case LadyStates.INITIAL:
                 break;
             case LadyStates.WANDERING:
-                wanderAround.enabled = false;
+                fMS_PathExecution.Exit();
                 break;
             case LadyStates.REACHING_EGG:
-                fMS_PathExecution.enabled = false;
+                fMS_PathExecution.Exit();
                 break;
             case LadyStates.REACHING_SEED:
-                fMS_PathExecution.enabled = false;
+                fMS_PathExecution.Exit();
                 break;
             case LadyStates.TRANSPORTING:
-                place = null;
-                fMS_PathExecution.enabled = false;
+                place = null; 
+                fMS_PathExecution.Exit();
                 target.transform.parent = null;
                 fMS_PathExecution.Target = null;
                 break;
@@ -160,18 +165,22 @@ public class FMS_LadyBug : FiniteStateMachine
         switch (newState)
         {
             case LadyStates.INITIAL:
+               
                 break;
             case LadyStates.WANDERING:
-                wanderAround.attractor = blackBoard.attractor;
-                wanderAround.enabled = true;
+               
+                place = SensingUtils.FindRandomInstanceWithinRadius(gameObject, "NODE", 90);
+                fMS_PathExecution.ReEnter();
+                fMS_PathExecution.Target = place;
+                
                 break;
             case LadyStates.REACHING_EGG:
-                fMS_PathExecution.enabled = true;
+                fMS_PathExecution.ReEnter();
                 fMS_PathExecution.Target = target;
 
                 break;
             case LadyStates.REACHING_SEED:
-                fMS_PathExecution.enabled = true;
+                fMS_PathExecution.ReEnter();
                 fMS_PathExecution.Target = target;
                 break;
             case LadyStates.TRANSPORTING:
@@ -183,8 +192,7 @@ public class FMS_LadyBug : FiniteStateMachine
 
                 target.transform.parent = gameObject.transform;
                 break;
-
-                
+                                
             default:
                 break;
         }
@@ -204,5 +212,6 @@ public class FMS_LadyBug : FiniteStateMachine
         }
         return false;
     }
+   
 }
 
