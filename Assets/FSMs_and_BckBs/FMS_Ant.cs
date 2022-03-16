@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using FSM;
+using Pathfinding;
 
+[RequireComponent(typeof(Ant_BLACKBOARD))]
 public class FMS_Ant : FiniteStateMachine
 {
     public enum AntStates { INITIAL, DELIVER, EXIT}
@@ -10,11 +12,16 @@ public class FMS_Ant : FiniteStateMachine
 
     private FMS_PathExecution fMS_PathExecution;
     private GameObject target;
+    public GameObject Load;
+    private Ant_BLACKBOARD blackBoard;
     // Start is called before the first frame update
     void Start()
     {
-        fMS_PathExecution.GetComponent<FMS_PathExecution>();
+        blackBoard = GetComponent<Ant_BLACKBOARD>();
+        fMS_PathExecution = GetComponent<FMS_PathExecution>();
         currentState = AntStates.INITIAL;
+
+        fMS_PathExecution.Exit();
     }
 
     // Update is called once per frame
@@ -23,12 +30,31 @@ public class FMS_Ant : FiniteStateMachine
         switch (currentState)
         {
             case AntStates.INITIAL:
-                ChangeState(AntStates.DELIVER);
+                    ChangeState(AntStates.DELIVER);
                 break;
             case AntStates.DELIVER:
-                ChangeState(AntStates.EXIT);
+                if (fMS_PathExecution.Terminated)
+                {
+                    GraphNode node = AstarPath.active.GetNearest(Load.transform.position,
+                        NNConstraint.Default).node;
+                    Load.transform.position = (Vector3)node.position;
+                    Load.transform.parent = null;
+                    if (Load.tag == blackBoard.seedOnAnt)
+                    {
+                        Load.tag = blackBoard.seed;
+                    }
+                    else if (Load.tag == blackBoard.eggOnAnt)
+                    {
+                        Load.tag = blackBoard.egg;
+                    }
+                    ChangeState(AntStates.EXIT);
+                }
                 break;
             case AntStates.EXIT:
+                if (fMS_PathExecution.Terminated)
+                {
+                    Destroy(gameObject);
+                }
                 break;
         }
     }
@@ -40,18 +66,25 @@ public class FMS_Ant : FiniteStateMachine
                 fMS_PathExecution.Exit();
                 break;
             case AntStates.EXIT:
-                fMS_PathExecution.Exit();
-                Destroy(gameObject);
                 break;
         }
 
         switch (newState)
         {
             case AntStates.DELIVER:
+                if (Load.tag == blackBoard.seedOnAnt)
+                {
+                    target = SensingUtils.FindRandomInstanceWithinRadius(blackBoard.storeChamber, blackBoard.seedChamber, 50);
+                }
+                else if (Load.tag == blackBoard.eggOnAnt)
+                {
+                    target = SensingUtils.FindRandomInstanceWithinRadius(blackBoard.hatchingChamber, blackBoard.nestChamber, 50);
+                }
                 fMS_PathExecution.ReEnter();
                 fMS_PathExecution.Target = target;
                 break;
             case AntStates.EXIT:
+                target = blackBoard.exitPoints[Random.Range(0, blackBoard.exitPoints.Length - 1)];
                 fMS_PathExecution.ReEnter();
                 fMS_PathExecution.Target = target;
                 break;
