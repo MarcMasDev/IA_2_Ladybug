@@ -1,23 +1,16 @@
 using FSM;
-using Steerings;
 using UnityEngine;
-using Pathfinding;
 
 public class FMS_LadyBug : FiniteStateMachine
 {
     public enum LadyStates { INITIAL, WANDERING, REACHING_EGG, REACHING_SEED, TRANSPORTING }
     public LadyStates currState;
 
-    private WanderAround wanderAround;
     private FMS_PathExecution fMS_PathExecution;
     private Lady_BLACKBOARD blackBoard;
 
-    //private float elapsedTime;
     private GameObject target;
     private GameObject place;
-
-    public Path CurrentPath;
-    private int randomWaypoint;
 
     private void Start()
     {
@@ -27,7 +20,6 @@ public class FMS_LadyBug : FiniteStateMachine
     }
     public override void Exit()
     {
-        //wanderAround.enabled = false;
         fMS_PathExecution.enabled = false;
         target.transform.parent = null;
 
@@ -53,7 +45,7 @@ public class FMS_LadyBug : FiniteStateMachine
                 GameObject egg = SensingUtils.FindInstanceWithinRadius(gameObject, blackBoard.eggTag, blackBoard.eggMinDistance);
                 GameObject seed = SensingUtils.FindInstanceWithinRadius(gameObject, blackBoard.seedTag, blackBoard.seedMinDistance);
 
-                if (egg == null) //&& seed == null) //No hay huevo ni semilla cerca. Vamos a ver primero si hay un huevo a 180u
+                if (egg == null) //No hay huevo ni semilla cerca. Vamos a ver primero si hay un huevo a 180u
                 {
                     egg = SensingUtils.FindRandomInstanceWithinRadius(gameObject, blackBoard.eggTag, blackBoard.eggMaxDistance);
 
@@ -63,7 +55,7 @@ public class FMS_LadyBug : FiniteStateMachine
                         ChangeState(LadyStates.REACHING_EGG);
                     }
 
-                    if (seed == null && egg == null)//Lo mismo que le primer If pero damos prioridad a la semilla aquí.
+                    if (seed == null && egg == null)//Lo mismo que al primer If pero dando prioridad a la semilla
                     {
                         seed = SensingUtils.FindRandomInstanceWithinRadius(gameObject, blackBoard.seedTag, blackBoard.seedMaxDistance);
                         if (seed != null)
@@ -81,7 +73,6 @@ public class FMS_LadyBug : FiniteStateMachine
                 else if (egg != null) //En el caso de que sí exista un huevo a 50unidades.
                 {
                     target = egg;
-                    egg = null;
                     ChangeState(LadyStates.REACHING_EGG);
                 }
                 break;
@@ -101,10 +92,10 @@ public class FMS_LadyBug : FiniteStateMachine
 
                 if (currTargetDistance <= blackBoard.transportingDistance)
                 {
-                    place = blackBoard.hatchingChamber;
+                    place = SensingUtils.FindRandomInstanceWithinRadius(blackBoard.hatchingChamber, blackBoard.nestChamber, 50);
                     ChangeState(LadyStates.TRANSPORTING);
                 }
-                else if (currTargetDistance > blackBoard.eggMaxDistance || target.tag != "EGG")
+                else if ( target.tag != "EGG")
                     ChangeState(LadyStates.WANDERING);
 
                 break;
@@ -115,10 +106,10 @@ public class FMS_LadyBug : FiniteStateMachine
 
                 if (SensingUtils.DistanceToTarget(gameObject, target) <= blackBoard.transportingDistance)
                 {
-                    place = blackBoard.storeChamber;
+                    place = SensingUtils.FindRandomInstanceWithinRadius(blackBoard.storeChamber, blackBoard.seedChamber,50);
                     ChangeState(LadyStates.TRANSPORTING);
                 }
-                else if (SensingUtils.DistanceToTarget(gameObject, target) > blackBoard.seedMaxDistance || target.tag != "SEED")
+                else if (target.tag != "SEED")
                     ChangeState(LadyStates.WANDERING);
 
                 break;
@@ -126,7 +117,7 @@ public class FMS_LadyBug : FiniteStateMachine
                
                 if (target.CompareTag(blackBoard.seedTransportedTag) && IsAnEggNear())
                     ChangeState(LadyStates.REACHING_EGG);
-                else if (SensingUtils.DistanceToTarget(gameObject, place) < blackBoard.transportingDistance)
+                else if (fMS_PathExecution.Terminated)
                     ChangeState(LadyStates.WANDERING);
 
                 break;
@@ -184,15 +175,16 @@ public class FMS_LadyBug : FiniteStateMachine
                 fMS_PathExecution.Target = target;
                 break;
             case LadyStates.TRANSPORTING:
+                fMS_PathExecution.ReEnter();
                 fMS_PathExecution.Target = place;
+
                 if (target.CompareTag(blackBoard.seedTag))
                     target.tag = blackBoard.seedTransportedTag;
                 else
                     target.tag = "Untagged";
 
                 target.transform.parent = gameObject.transform;
-                break;
-                                
+                break;       
             default:
                 break;
         }
@@ -212,6 +204,5 @@ public class FMS_LadyBug : FiniteStateMachine
         }
         return false;
     }
-   
 }
 

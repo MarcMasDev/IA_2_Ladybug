@@ -11,6 +11,8 @@ TagManager:
   - SEED
   - TRANSPORTEDSEED
   - NODE
+  - SEEDCHAMBER
+  - NESTCHAMBER
   layers:
   - Default
   - TransparentFX

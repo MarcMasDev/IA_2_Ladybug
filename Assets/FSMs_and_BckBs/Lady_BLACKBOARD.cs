@@ -15,7 +15,16 @@ public class Lady_BLACKBOARD : MonoBehaviour
     public float eggMinDistance=50;
     public float eggMaxDistance=180;
     public float transportingDistance=5;
-    public string eggTag, seedTag, seedTransportedTag;
+
+    [Space(5)]
+    [Header("TAGS")]
+    public string eggTag;
+    public string seedTag;
+    public string seedTransportedTag;
+    public string nestChamber;
+    public string seedChamber;
+    [Tooltip("where ants can moves and throws the seed")]
+    public string PathNode;
   
 
     //[Space(20)]
