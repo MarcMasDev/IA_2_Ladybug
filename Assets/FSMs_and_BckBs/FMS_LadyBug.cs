@@ -37,7 +37,7 @@ public class FMS_LadyBug : FiniteStateMachine
                 if (fMS_PathExecution.Terminated)
                 {
                     fMS_PathExecution.ReEnter();
-                    place = SensingUtils.FindRandomInstanceWithinRadius(gameObject, "NODE", 90);
+                    place = SensingUtils.FindRandomInstanceWithinRadius(gameObject, blackBoard.PathNode, 90);
                     fMS_PathExecution.Target = place;
                 }
                 
@@ -160,7 +160,7 @@ public class FMS_LadyBug : FiniteStateMachine
                 break;
             case LadyStates.WANDERING:
                
-                place = SensingUtils.FindRandomInstanceWithinRadius(gameObject, "NODE", 90);
+                place = SensingUtils.FindRandomInstanceWithinRadius(gameObject, blackBoard.PathNode, 90);
                 fMS_PathExecution.ReEnter();
                 fMS_PathExecution.Target = place;
                 

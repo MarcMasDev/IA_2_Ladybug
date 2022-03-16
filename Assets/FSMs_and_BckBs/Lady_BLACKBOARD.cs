@@ -3,7 +3,6 @@ using UnityEngine;
 public class Lady_BLACKBOARD : MonoBehaviour
 {
     [Header("LadyBug")]
-    public GameObject attractor;
     public GameObject hatchingChamber, storeChamber;
     [Space(5)]
     public float IntervalBetweenIncrements;

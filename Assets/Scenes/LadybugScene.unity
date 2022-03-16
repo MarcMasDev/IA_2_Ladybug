@@ -3457,7 +3457,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad910fefb69098848affe4cf584bd007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attractor: {fileID: 0}
   hatchingChamber: {fileID: 543965271}
   storeChamber: {fileID: 275642153}
   IntervalBetweenIncrements: 0.2
@@ -3473,7 +3472,7 @@ MonoBehaviour:
   seedTransportedTag: TRANSPORTEDSEED
   nestChamber: NESTCHAMBER
   seedChamber: SEEDCHAMBER
-  PathNode: 
+  PathNode: NODE
 --- !u!114 &540637518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8942,7 +8941,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad910fefb69098848affe4cf584bd007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attractor: {fileID: 0}
   hatchingChamber: {fileID: 543965271}
   storeChamber: {fileID: 275642153}
   IntervalBetweenIncrements: 0.2
@@ -8958,7 +8956,7 @@ MonoBehaviour:
   seedTransportedTag: TRANSPORTEDSEED
   nestChamber: NESTCHAMBER
   seedChamber: SEEDCHAMBER
-  PathNode: 
+  PathNode: NODE
 --- !u!114 &1393756696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11029,7 +11027,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad910fefb69098848affe4cf584bd007, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attractor: {fileID: 0}
   hatchingChamber: {fileID: 543965271}
   storeChamber: {fileID: 275642153}
   IntervalBetweenIncrements: 0.2
@@ -11045,7 +11042,7 @@ MonoBehaviour:
   seedTransportedTag: TRANSPORTEDSEED
   nestChamber: NESTCHAMBER
   seedChamber: SEEDCHAMBER
-  PathNode: 
+  PathNode: NODE
 --- !u!114 &1736953994
 MonoBehaviour:
   m_ObjectHideFlags: 0
