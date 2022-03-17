@@ -2701,7 +2701,6 @@ GameObject:
   - component: {fileID: 418276855}
   - component: {fileID: 418276856}
   - component: {fileID: 418276857}
-  - component: {fileID: 418276858}
   m_Layer: 0
   m_Name: AntSpawnerLeft
   m_TagString: Untagged
@@ -2793,23 +2792,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &418276858
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 418276854}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0f1ad7aee2233347aa5695929a73f6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  eggAnt: {fileID: 0}
-  seedAnt: {fileID: 0}
-  eggProb: 0
-  minTime: 0
-  maxTime: 0
 --- !u!1 &428272201
 GameObject:
   m_ObjectHideFlags: 0

@@ -72,14 +72,7 @@ public class FMS_Ant : FiniteStateMachine
         switch (newState)
         {
             case AntStates.DELIVER:
-                if (Load.tag == blackBoard.seedOnAnt)
-                {
-                    target = SensingUtils.FindRandomInstanceWithinRadius(blackBoard.storeChamber, blackBoard.seedChamber, 50);
-                }
-                else if (Load.tag == blackBoard.eggOnAnt)
-                {
-                    target = SensingUtils.FindRandomInstanceWithinRadius(blackBoard.hatchingChamber, blackBoard.nestChamber, 50);
-                }
+                target = SensingUtils.FindRandomInstanceWithinRadius(gameObject, "NODE", 100);
                 fMS_PathExecution.ReEnter();
                 fMS_PathExecution.Target = target;
                 break;
