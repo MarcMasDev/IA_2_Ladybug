@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Ant_BLACKBOARD : MonoBehaviour
 {
-    public GameObject hatchingChamber, storeChamber;
+    
     public GameObject[] exitPoints;
     public string nestChamber;
     public string seedChamber;

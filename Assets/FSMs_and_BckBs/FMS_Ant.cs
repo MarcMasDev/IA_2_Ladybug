@@ -47,6 +47,7 @@ public class FMS_Ant : FiniteStateMachine
                     {
                         Load.tag = blackBoard.egg;
                     }
+                    print(gameObject+"exit");
                     ChangeState(AntStates.EXIT);
                 }
                 break;
